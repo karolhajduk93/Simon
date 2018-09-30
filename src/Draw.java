@@ -7,12 +7,15 @@ public class Draw extends JComponent {
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
 
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if(Simon_Game.buttonClicked == 1) {
             g2.setColor(Color.green);
+
         }
         else
             g2.setColor(Color.green.darker());
         g2.fillRect(0,0, 240, 230);
+
 
         if(Simon_Game.buttonClicked == 2) {
             g2.setColor(Color.red);
@@ -43,7 +46,7 @@ public class Draw extends JComponent {
         int r = 200, r2 = 50;
         g2.drawOval(140 - r, 130 - r,600, 600);
 
-        g2.setStroke(new BasicStroke(2));
+        g2.setStroke(new BasicStroke(5));
         g2.fillOval(240 - r2, 230 - r2,r2 * 2, r2 * 2);
         g2.drawString("SIMON", 223, 235); // will be progress number in exchange of SIMON
 
