@@ -9,9 +9,11 @@ import java.util.Random;
 public class Simon_Game extends JFrame implements ActionListener{
 
     static int buttonClicked = 0;
-    int patternCounter = -1;
+    int patternCounter = -1, displayCounter = -1;
+    boolean display = false;
     ArrayList<Integer> pattern = new ArrayList<>();
     ArrayList<Integer> move = new ArrayList<>();
+
 
     public static void main(String[] args) {
         new Simon_Game();
@@ -23,51 +25,49 @@ public class Simon_Game extends JFrame implements ActionListener{
         this.setResizable(false);
         this.setTitle("SIMON");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Timer timer = new Timer(600, this);
+        Timer timer = new Timer(500, this);
 
 
         Draw draw = new Draw();
         this.add(draw);
         timer.start();
 
-
-        //tworzy pattern = 1
-        //dispalyuje pattern
-        //czeka az listener
-        //sprawdza czy takie same jak taki sam to dodaje do pattern i pattern = 2
-        // jak nie to reset i pattern = 1
-        //displayuje pattern
-        //czekaj na listener. jelis takie same i
         createPattern();
+        display = true;
+
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {}
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(e.getX() > 0 && e.getX() < 240 && e.getY() > 0 && e.getY() < 230){
+                if(e.getX() > 0 && e.getX() < 240 && e.getY() > 0 && e.getY() < 230 && !display){
                     buttonClicked = 1;
+                    move.add(0);
                     move.add(1);
-                    patternCounter++;
+                    patternCounter += 2;
                     patternCheck();
 
                 }
-                else if(e.getX() > 240 && e.getX() < 500 && e.getY() > 0 && e.getY() < 230){
+                else if(e.getX() > 240 && e.getX() < 500 && e.getY() > 0 && e.getY() < 230 && !display){
                     buttonClicked = 2;
+                    move.add(0);
                     move.add(2);
-                    patternCounter++;
+                    patternCounter += 2;
                     patternCheck();
                 }
-                else if(e.getX() > 0 && e.getX() < 240 && e.getY() > 230 && e.getY() < 500){
+                else if(e.getX() > 0 && e.getX() < 240 && e.getY() > 230 && e.getY() < 500 && !display){
                     buttonClicked = 3;
+                    move.add(0);
                     move.add(3);
-                    patternCounter++;
+                    patternCounter += 2;
                     patternCheck();
                 }
-                else if(e.getX() > 240 && e.getX() < 500 && e.getY() > 230 && e.getY() < 500){
+                else if(e.getX() > 240 && e.getX() < 500 && e.getY() > 230 && e.getY() < 500 && !display){
                     buttonClicked = 4;
+                    move.add(0);
                     move.add(4);
-                    patternCounter++;
+                    patternCounter += 2;
                     patternCheck();
 
                 }
@@ -76,7 +76,10 @@ public class Simon_Game extends JFrame implements ActionListener{
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+                buttonClicked = 0;
+                repaint();
+            }
 
             @Override
             public void mouseEntered(MouseEvent e) {}
@@ -90,23 +93,36 @@ public class Simon_Game extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent ev) {
+        
+        if(!display) {
             buttonClicked = 0;
             repaint();
-
+        }
+        else {
+            displayCounter++;
+            if(displayCounter <= pattern.size() - 1) {
+                buttonClicked = pattern.get(displayCounter);
+                repaint();
+            }
+            else {
+                displayCounter = -1;
+                display = false;
+            }
+        }
     }
 
     public void createPattern(){
         Random random = new Random();
+        pattern.add(0);
         pattern.add(random.nextInt(4) + 1);
         System.out.println(pattern.toString());
     }
 
     public void patternCheck(){
-        System.out.println(patternCounter + pattern.size());
         if(move.get(patternCounter) == pattern.get(patternCounter)) {
             if (patternCounter == pattern.size() - 1) {
                 createPattern();
-                //display pattern
+                display = true;
                 move.clear();
                 patternCounter = -1;
             }
@@ -115,8 +131,10 @@ public class Simon_Game extends JFrame implements ActionListener{
             move.clear();
             pattern.clear();
             createPattern();
-            //display pattern
+            display = true;
             patternCounter = -1;
+
         }
     }
+
 }
