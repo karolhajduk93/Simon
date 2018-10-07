@@ -55,5 +55,18 @@ public class Draw extends JComponent {
 
         g2.drawLine(240 - r, 230, 240 - r2, 230);
         g2.drawLine(240 + r2, 230, 240 + r, 230);
+
+        g2.setColor(Color.white);
+        Font f = new Font("serif", Font.PLAIN, 40);
+        g2.setFont(f);
+
+        if(Simon_Game.move.size() > 0) {
+            g2.drawString(Integer.toString(Simon_Game.move.size() / 2), 210, 240);
+        }
+        else
+            g2.drawString(Integer.toString(Simon_Game.move.size()), 210, 240);
+
+        g2.drawString("/", 235, 240);
+        g2.drawString(Integer.toString(Simon_Game.pattern.size() / 2), 250  , 240 );
     }
 }
